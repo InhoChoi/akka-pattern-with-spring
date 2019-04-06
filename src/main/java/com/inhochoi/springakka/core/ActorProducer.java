@@ -6,16 +6,14 @@ import lombok.SneakyThrows;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class ActorBeanProducer implements IndirectActorProducer {
+public class ActorProducer implements IndirectActorProducer {
     private ApplicationContext applicationContext;
     private Class<? extends Actor> actorClass;
     private Object[] arguments;
 
-    public ActorBeanProducer(ApplicationContext applicationContext,
-                             Class<? extends Actor> actorClass, Object... arguments) {
+    public ActorProducer(ApplicationContext applicationContext,
+                         Class<? extends Actor> actorClass, Object... arguments) {
         this.applicationContext = applicationContext;
         this.actorClass = actorClass;
         this.arguments = arguments;
