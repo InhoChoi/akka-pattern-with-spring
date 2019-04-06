@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'com.typesafe.akka:akka-actor_2.12:2.5.22'
 
 	compileOnly 'org.projectlombok:lombok'
