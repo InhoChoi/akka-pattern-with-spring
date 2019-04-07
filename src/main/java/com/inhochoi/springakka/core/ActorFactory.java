@@ -14,13 +14,13 @@ public class ActorFactory {
         this.actorSystem = actorSystem;
     }
 
-    public ActorRef actorOf(Class<? extends Actor> actorClass, Object... arguments) {
+    public ActorRef actorOf(Class<? extends Actor> actorClass, String actorName, Object... arguments) {
         return actorSystem.actorOf(SPRING_EXTENSION_PROVIDER.get(actorSystem)
-                .props(actorClass, arguments));
+                .props(actorClass, arguments), actorName);
     }
 
-    public ActorRef actorOf(ActorContext actorContext, Class<? extends Actor> actorClass, Object... arguments) {
+    public ActorRef actorOf(ActorContext actorContext, Class<? extends Actor> actorClass, String actorName, Object... arguments) {
         return actorContext.actorOf(SPRING_EXTENSION_PROVIDER.get(actorSystem)
-                .props(actorClass, arguments));
+                .props(actorClass, arguments), actorName);
     }
 }

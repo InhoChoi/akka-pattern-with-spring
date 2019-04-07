@@ -31,13 +31,13 @@ public class SpringAkkaApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // 1. Hello Actor
-        ActorRef helloActor = actorFactory.actorOf(HelloActor.class, "Inhochoi");
+        ActorRef helloActor = actorFactory.actorOf(HelloActor.class, "HelloActor", "inhochoi");
         ask(helloActor, "Hello", Duration.of(1, ChronoUnit.SECONDS))
                 .thenApply(it -> (String) it)
                 .thenAccept(it -> log.info("Hello Actor Response :  {}", it));
 
         // 2. Child Actor
-        ActorRef parentActor = actorFactory.actorOf(ParentActor.class);
+        ActorRef parentActor = actorFactory.actorOf(ParentActor.class, "ParentActor");
         ask(parentActor, new ParentActor.WorkStart(100L), Duration.of(1, ChronoUnit.SECONDS))
                 .thenApply(it -> (Long) it)
                 .thenAccept(it -> log.info("Parent Actor Response :  {}", it));

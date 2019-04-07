@@ -7,6 +7,7 @@ import com.inhochoi.springakka.core.ActorFactory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Duration;
@@ -19,7 +20,6 @@ public class ParentActor extends AbstractActor {
     @Autowired
     private ActorFactory actorFactory;
 
-
     private ActorRef actor1;
     private ActorRef actor2;
     private ActorRef actor3;
@@ -27,9 +27,9 @@ public class ParentActor extends AbstractActor {
     @Override
     public void preStart() throws Exception {
         super.preStart();
-        this.actor1 = actorFactory.actorOf(context(), ChildActor.class, 1L);
-        this.actor2 = actorFactory.actorOf(context(), ChildActor.class, 2L);
-        this.actor3 = actorFactory.actorOf(context(), ChildActor.class, 3L);
+        this.actor1 = actorFactory.actorOf(context(), ChildActor.class, "Child1", 1L);
+        this.actor2 = actorFactory.actorOf(context(), ChildActor.class, "Child2", 2L);
+        this.actor3 = actorFactory.actorOf(context(), ChildActor.class, "Child3", 3L);
     }
 
 
@@ -59,6 +59,7 @@ public class ParentActor extends AbstractActor {
     }
 
     @Getter
+    @ToString
     @AllArgsConstructor
     static class Request {
         private Long input;

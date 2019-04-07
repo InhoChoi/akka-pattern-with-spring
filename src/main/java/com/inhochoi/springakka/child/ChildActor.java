@@ -4,8 +4,10 @@ import akka.actor.AbstractActor;
 import akka.japi.pf.ReceiveBuilder;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Slf4j
 public class ChildActor extends AbstractActor {
     @Autowired
     private ChildService childService;
@@ -24,6 +26,7 @@ public class ChildActor extends AbstractActor {
     }
 
     private void receive(ParentActor.Request request) {
+        log.info("Child Actor : {}, Actor got message, {}", getSelf().path(), request);
         sender().tell(childService.multipy(request.getInput(), number), self());
     }
 
