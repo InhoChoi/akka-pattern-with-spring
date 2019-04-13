@@ -7,6 +7,7 @@ import com.inhochoi.springakka.child.ParentActor;
 import com.inhochoi.springakka.core.ActorConfiguration;
 import com.inhochoi.springakka.core.ActorProps;
 import com.inhochoi.springakka.hello.HelloActor;
+import com.inhochoi.springakka.persistence.PersistenceActor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -49,5 +50,12 @@ public class SpringAkkaApplication implements CommandLineRunner {
         ask(parentActor, new ParentActor.WorkStart(100L), Duration.of(1, ChronoUnit.SECONDS))
                 .thenApply(it -> (Long) it)
                 .thenAccept(it -> log.info("Parent Actor Response :  {}", it));
+
+        // 3. Persistence Actor
+        Props persistenceActorProps = actorProps.props(PersistenceActor.class, "persistence1");
+        ActorRef persistenceActor = actorSystem.actorOf(persistenceActorProps, "PersistenceActor");
+        ask(persistenceActor, "Get", Duration.of(1, ChronoUnit.SECONDS))
+                .thenApply(it -> (Long) it)
+                .thenAccept(it -> log.info("PersistenceActor Actor Response :  {}", it));
     }
 }
