@@ -22,8 +22,8 @@ public class ActorConfiguration {
     }
 
     @Bean
-    public ActorFactory actorFactory() {
-        return new ActorFactory(actorSystem());
+    public ActorProps actorFactory() {
+        return new ActorProps(actorSystem());
     }
 
 }

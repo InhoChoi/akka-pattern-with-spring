@@ -1,9 +1,11 @@
 package com.inhochoi.springakka;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
 import com.inhochoi.springakka.child.ParentActor;
 import com.inhochoi.springakka.core.ActorConfiguration;
-import com.inhochoi.springakka.core.ActorFactory;
+import com.inhochoi.springakka.core.ActorProps;
 import com.inhochoi.springakka.hello.HelloActor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +28,24 @@ public class SpringAkkaApplication implements CommandLineRunner {
     }
 
     @Autowired
-    private ActorFactory actorFactory;
+    private ActorProps actorProps;
+
+    @Autowired
+    private ActorSystem actorSystem;
 
     @Override
     public void run(String... args) throws Exception {
         // 1. Hello Actor
-        ActorRef helloActor = actorFactory.actorOf(HelloActor.class, "HelloActor", "inhochoi");
+        Props helloActorProps = actorProps.props(HelloActor.class, "inhochoi");
+        ActorRef helloActor = actorSystem.actorOf(helloActorProps, "HelloActor");
+
         ask(helloActor, "Hello", Duration.of(1, ChronoUnit.SECONDS))
                 .thenApply(it -> (String) it)
                 .thenAccept(it -> log.info("Hello Actor Response :  {}", it));
 
         // 2. Child Actor
-        ActorRef parentActor = actorFactory.actorOf(ParentActor.class, "ParentActor");
+        Props parentActorProps = actorProps.props(ParentActor.class);
+        ActorRef parentActor = actorSystem.actorOf(parentActorProps, "ParentActor");
         ask(parentActor, new ParentActor.WorkStart(100L), Duration.of(1, ChronoUnit.SECONDS))
                 .thenApply(it -> (Long) it)
                 .thenAccept(it -> log.info("Parent Actor Response :  {}", it));

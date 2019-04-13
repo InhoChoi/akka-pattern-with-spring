@@ -2,8 +2,9 @@ package com.inhochoi.springakka.child;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
+import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
-import com.inhochoi.springakka.core.ActorFactory;
+import com.inhochoi.springakka.core.ActorProps;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -18,7 +19,7 @@ import static akka.pattern.Patterns.ask;
 
 public class ParentActor extends AbstractActor {
     @Autowired
-    private ActorFactory actorFactory;
+    private ActorProps actorProps;
 
     private ActorRef actor1;
     private ActorRef actor2;
@@ -27,9 +28,14 @@ public class ParentActor extends AbstractActor {
     @Override
     public void preStart() throws Exception {
         super.preStart();
-        this.actor1 = actorFactory.actorOf(context(), ChildActor.class, "Child1", 1L);
-        this.actor2 = actorFactory.actorOf(context(), ChildActor.class, "Child2", 2L);
-        this.actor3 = actorFactory.actorOf(context(), ChildActor.class, "Child3", 3L);
+
+        Props actor1 = actorProps.props(ChildActor.class, 1L);
+        Props actor2 = actorProps.props(ChildActor.class, 2L);
+        Props actor3 = actorProps.props(ChildActor.class, 3L);
+
+        this.actor1 = context().actorOf(actor1, "Child1");
+        this.actor2 = context().actorOf(actor2, "Child2");
+        this.actor3 = context().actorOf(actor3, "Child3");
     }
 
 
