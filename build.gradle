@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.4.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -10,19 +10,22 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'com.typesafe.akka:akka-actor_2.12:2.5.22'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'com.typesafe.akka:akka-actor_2.12:2.5.22'
+    implementation 'com.typesafe.akka:akka-persistence_2.12:2.5.22'
+    implementation 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
 
-	compileOnly 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    compileOnly 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
