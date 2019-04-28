@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Import;
+import scala.compat.java8.FutureConverters;
 
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -36,6 +38,9 @@ public class StreamRunner implements CommandLineRunner {
 
     @Autowired
     private ActorSystem actorSystem;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     public void run(String... args) throws Exception {
@@ -64,5 +69,9 @@ public class StreamRunner implements CommandLineRunner {
         for (String str : strings) {
             log.info("Result : {}", str);
         }
+
+        // Shutdown ActorSystem, Spring Application Context
+        FutureConverters.toJava(actorSystem.terminate()).toCompletableFuture().get();
+        System.exit(0);
     }
 }
