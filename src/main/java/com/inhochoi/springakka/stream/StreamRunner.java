@@ -72,6 +72,7 @@ public class StreamRunner implements CommandLineRunner {
 
         // Shutdown ActorSystem, Spring Application Context
         FutureConverters.toJava(actorSystem.terminate()).toCompletableFuture().get();
-        System.exit(0);
+        System.exit(SpringApplication
+                .exit(applicationContext));
     }
 }
