@@ -41,7 +41,8 @@ public class StreamRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Props streamActorProps = actorProps.props(StreamActor.class);
 
-        ActorRef router = actorSystem.actorOf(new RoundRobinPool(10).props(streamActorProps),
+        ActorRef router = actorSystem.actorOf(new RoundRobinPool(100).props(streamActorProps).
+                        withDispatcher("blocking-io-dispatcher"),
                 "streamActor");
 
         Materializer materializer = ActorMaterializer.create(actorSystem);
@@ -53,7 +54,7 @@ public class StreamRunner implements CommandLineRunner {
 
         CompletionStage<List<String>> listCompletionStage = Source.range(1, 100)
                 .map(String::valueOf)
-                .ask(10, router, String.class, timeout)
+                .ask(100, router, String.class, timeout)
                 .runWith(Sink.seq(), materializer);
 
         List<String> strings = listCompletionStage.toCompletableFuture().get();
