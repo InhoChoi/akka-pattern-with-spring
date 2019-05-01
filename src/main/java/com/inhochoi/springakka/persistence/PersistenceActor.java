@@ -3,10 +3,12 @@ package com.inhochoi.springakka.persistence;
 import akka.japi.pf.ReceiveBuilder;
 import akka.persistence.AbstractPersistentActor;
 import akka.persistence.SnapshotOffer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public class PersistenceActor extends AbstractPersistentActor {
-    private Long count = 0L;
-
+    private State state = State.create(0L);
     private String name;
 
     public PersistenceActor(String name) {
@@ -21,7 +23,7 @@ public class PersistenceActor extends AbstractPersistentActor {
     }
 
     private void recover(SnapshotOffer snapshotOffer) {
-        this.count = (Long) snapshotOffer.snapshot();
+        this.state = (State) snapshotOffer.snapshot();
     }
 
 
@@ -33,13 +35,25 @@ public class PersistenceActor extends AbstractPersistentActor {
     }
 
     private void get(String get) {
-        sender().tell(count, self());
-        saveSnapshot(count + 1);
+        sender().tell(state.getCount(), self());
+        state.increase();
+        saveSnapshot(state);
     }
 
 
     @Override
     public String persistenceId() {
         return name;
+    }
+
+    @Getter
+    @AllArgsConstructor(staticName = "create")
+    public static class State {
+        @JsonProperty("count")
+        private Long count;
+
+        public void increase() {
+            count = count++;
+        }
     }
 }
