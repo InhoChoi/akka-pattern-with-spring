@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "http://repo1.maven.org/maven2"
+        }
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.1.4.RELEASE'
     id 'java'
@@ -30,7 +39,7 @@ dependencies {
     implementation 'com.typesafe.akka:akka-persistence_2.12:2.5.22'
     implementation 'com.typesafe.akka:akka-stream_2.12:2.5.22'
     implementation 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
-
+    implementation 'com.github.romix.akka:akka-kryo-serialization_2.12:0.5.2'
 
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
