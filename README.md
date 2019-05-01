@@ -23,3 +23,10 @@
   - Add Pause Status
   - Add Finish Status
   - Graceful shutdown
+
+## Rebalanceable Task Pattern with Akka Cluster
+- TBD
+- Akka Cluster, Akka Cluster Sharding, Persistence Actor
+
+## Akka Stream with actor
+- Akka Stream using actor
