@@ -42,6 +42,7 @@ dependencies {
     implementation('com.github.romix.akka:akka-kryo-serialization_2.12:0.5.2') {
         exclude group: 'com.typesafe.akka'
     }
+    implementation 'com.typesafe.akka:akka-slf4j_2.12:2.5.22'
 
     compileOnly 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
