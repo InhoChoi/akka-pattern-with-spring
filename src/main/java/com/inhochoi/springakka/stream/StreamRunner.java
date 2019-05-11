@@ -3,9 +3,13 @@ package com.inhochoi.springakka.stream;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.japi.Pair;
 import akka.routing.RoundRobinPool;
 import akka.stream.ActorMaterializer;
+import akka.stream.KillSwitches;
 import akka.stream.Materializer;
+import akka.stream.UniqueKillSwitch;
+import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Sink;
 import akka.stream.javadsl.Source;
 import akka.util.Timeout;
@@ -57,12 +61,15 @@ public class StreamRunner implements CommandLineRunner {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.start();
 
-        CompletionStage<List<String>> listCompletionStage = Source.range(1, 100)
+
+        Pair<UniqueKillSwitch, CompletionStage<List<String>>> run = Source.range(1, 100)
+                .viaMat(KillSwitches.single(), Keep.right())
                 .map(String::valueOf)
                 .ask(100, router, String.class, timeout)
-                .runWith(Sink.seq(), materializer);
+                .toMat(Sink.seq(), Keep.both())
+                .run(materializer);
 
-        List<String> strings = listCompletionStage.toCompletableFuture().get();
+        List<String> strings = run.second().toCompletableFuture().get();
         stopwatch.stop();
 
         log.info("Time : {}", stopwatch.toString());
